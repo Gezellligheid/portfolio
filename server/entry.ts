@@ -1,6 +1,4 @@
 import "dotenv/config";
-import { dbMiddleware } from "./db-middleware";
-import { createTodoHandler } from "./create-todo-handler";
 import { apply, serve } from "@photonjs/hono";
 import { Hono } from "hono";
 
@@ -10,15 +8,6 @@ export default startApp() as unknown;
 
 function startApp() {
   const app = new Hono();
-
-  apply(app, [
-    // Make database available in Context as `context.db`
-    dbMiddleware,
-
-    createTodoHandler,
-  ]);
-
-  return serve(app, {
-    port,
-  });
+  apply(app, []);
+  return serve(app, { port });
 }

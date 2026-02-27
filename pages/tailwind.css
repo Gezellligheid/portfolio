@@ -1,8 +1,138 @@
 @import "tailwindcss";
 
+@theme {
+  --color-forest: #f97316;
+  --color-moss: #16162a;
+  --color-cream: #f0efff;
+  --color-sand: #a78bfa;
+  --color-rust: #fb923c;
+
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #09090f;
+    color: #f0efff;
+    font-family: var(--font-sans);
+    margin: 0;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  ::selection {
+    background-color: #f97316;
+    color: #09090f;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #09090f;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #f97316;
+    border-radius: 3px;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes slideRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.6s ease both;
+}
+.animate-fade-in {
+  animation: fadeIn 0.5s ease both;
+}
+.animate-slide-right {
+  animation: slideRight 0.5s ease both;
+}
+
+.delay-100 {
+  animation-delay: 0.1s;
+}
+.delay-200 {
+  animation-delay: 0.2s;
+}
+.delay-300 {
+  animation-delay: 0.3s;
+}
+.delay-400 {
+  animation-delay: 0.4s;
+}
+.delay-500 {
+  animation-delay: 0.5s;
+}
+.delay-600 {
+  animation-delay: 0.6s;
+}
+.delay-700 {
+  animation-delay: 0.7s;
+}
+
+/* Scroll-reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition:
+    opacity 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 @layer base {
   h1 {
-    @apply mb-4 text-4xl font-bold tracking-tight text-gray-900;
+    @apply mb-4 text-4xl font-bold tracking-tight;
   }
   ul {
     @apply list-disc pl-6;
@@ -12,8 +142,5 @@
   }
   p {
     @apply mb-2 mt-2;
-  }
-  a {
-    @apply text-blue-600 hover:text-pink-400 visited:text-blue-900;
   }
 }
