@@ -16,10 +16,6 @@
           <Icon icon="mdi:github" class="w-4 h-4" />
           GitHub
         </a>
-        <a href="https://www.fiverr.com/sellers/eliasdebaveye" target="_blank" rel="noopener" class="social-pill">
-          <Icon icon="simple-icons:fiverr" class="w-4 h-4" />
-          Fiverr
-        </a>
         <a href="https://www.instagram.com/mtstorm_" target="_blank" rel="noopener" class="social-pill">
           <Icon icon="mdi:instagram" class="w-4 h-4" />
           @mtstorm_
@@ -34,6 +30,6 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
-import SectionHeader from '../SectionHeader.vue';
+import { Icon } from "@iconify/vue";
+import SectionHeader from "../SectionHeader.vue";
 </script>
