@@ -52,6 +52,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useData } from "vike-vue/useData";
+import { useConfig } from "vike-vue/useConfig";
 import type { Data } from "./+data";
 import MdQuote from "../../../components/md/MdQuote.vue";
 import MdCallout from "../../../components/md/MdCallout.vue";
@@ -59,6 +60,9 @@ import MdTextImage from "../../../components/md/MdTextImage.vue";
 
 const post = useData<Data>();
 const imageOk = ref(true);
+
+const config = useConfig();
+config.set({ title: `${post.title} — Elias`, description: post.description });
 </script>
 
 <style scoped>
