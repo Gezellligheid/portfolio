@@ -13,8 +13,8 @@
         <span v-for="tag in post.tags" :key="tag" class="tag">{{ tag }}</span>
       </div>
 
-      <h1 class="mt-4 text-4xl md:text-5xl font-extrabold text-cream leading-tight">{{ post.title }}</h1>
-      <p class="mt-4 text-cream/60 text-lg leading-relaxed max-w-xl">{{ post.description }}</p>
+      <h1 class="mt-4 text-3xl md:text-5xl font-extrabold text-cream leading-tight">{{ post.title }}</h1>
+      <p class="mt-4 text-cream/60 text-base md:text-lg leading-relaxed max-w-xl">{{ post.description }}</p>
 
       <p v-if="post.client" class="mt-4 text-sm text-forest font-semibold uppercase tracking-widest">
         Client: {{ post.client }}
@@ -27,7 +27,20 @@
     </div>
 
     <!-- Content -->
-    <article class="prose max-w-3xl mx-auto px-6 py-12" v-html="post.html" />
+    <article class="prose max-w-3xl mx-auto px-6 py-12">
+      <template v-for="(block, i) in post.blocks" :key="i">
+        <div v-if="block.type === 'html'" v-html="block.html" />
+        <MdQuote v-else-if="block.type === 'quote'" :html="block.html" />
+        <MdCallout v-else-if="block.type === 'callout'" :type="block.calloutType" :html="block.html" />
+        <MdTextImage
+          v-else-if="block.type === 'text-image'"
+          :src="block.src"
+          :alt="block.alt"
+          :position="block.position"
+          :html="block.html"
+        />
+      </template>
+    </article>
 
     <!-- Footer nav -->
     <div class="max-w-3xl mx-auto px-6 pb-24">
@@ -40,6 +53,9 @@
 import { ref } from "vue";
 import { useData } from "vike-vue/useData";
 import type { Data } from "./+data";
+import MdQuote from "../../../components/md/MdQuote.vue";
+import MdCallout from "../../../components/md/MdCallout.vue";
+import MdTextImage from "../../../components/md/MdTextImage.vue";
 
 const post = useData<Data>();
 const imageOk = ref(true);
@@ -57,16 +73,6 @@ const imageOk = ref(true);
 }
 .back-link:hover {
   color: #fb923c;
-}
-.tag {
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  background: rgba(249, 115, 22, 0.15);
-  color: #f97316;
-  border-radius: 9999px;
-  padding: 0.15rem 0.6rem;
 }
 </style>
 
@@ -167,5 +173,29 @@ const imageOk = ref(true);
   border-radius: 0.75rem;
   max-width: 100%;
   margin: 2em 0;
+}
+.prose-figure {
+  position: relative;
+  margin: 2em 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+.prose-figure img {
+  margin: 0;
+  width: 100%;
+  display: block;
+}
+.prose-figure figcaption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem 0.85rem 0.65rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent);
+  font-size: 0.72rem;
+  color: rgba(240, 239, 255, 0.6);
+  font-style: italic;
+  letter-spacing: 0.01em;
+  pointer-events: none;
 }
 </style>

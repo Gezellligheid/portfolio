@@ -10,19 +10,42 @@
     </div>
 
     <!-- Nav -->
-    <nav
-      class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-4 backdrop-blur-md bg-[#09090f]/90 border-b border-white/5"
-    >
-      <a href="/" class="text-cream font-bold text-xl tracking-tight hover:text-[--color-forest] transition-colors">
-        Elias<span class="text-[--color-forest]">.</span>
-      </a>
-      <div class="flex items-center gap-7">
-        <a href="/#about" class="nav-link">About</a>
-        <a href="/#skills" class="nav-link">Skills</a>
-        <a href="/work" class="nav-link">Work</a>
-        <a href="/#contact" class="nav-link">Contact</a>
+    <nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[#09090f]/90 border-b border-white/5">
+      <div class="flex items-center justify-between px-6 md:px-12 py-4">
+        <a href="/" class="text-cream font-bold text-xl tracking-tight hover:text-[--color-forest] transition-colors">
+          Elias<span class="text-[--color-forest]">.</span>
+        </a>
+        <!-- Desktop links -->
+        <div class="hidden md:flex items-center gap-7">
+          <a href="/#about" class="nav-link">About</a>
+          <a href="/#skills" class="nav-link">Skills</a>
+          <a href="/work" class="nav-link">Work</a>
+          <a href="/#contact" class="nav-link">Contact</a>
+        </div>
+        <!-- Hamburger button -->
+        <button
+          class="md:hidden flex flex-col justify-center items-center w-8 h-8 gap-[5px]"
+          @click="menuOpen = !menuOpen"
+          aria-label="Toggle menu"
+        >
+          <span class="hamburger-line" :class="{ 'rotate-45 translate-y-[7px]': menuOpen }"></span>
+          <span class="hamburger-line" :class="{ 'opacity-0': menuOpen }"></span>
+          <span class="hamburger-line" :class="{ '-rotate-45 -translate-y-[7px]': menuOpen }"></span>
+        </button>
       </div>
     </nav>
+
+    <!-- Fullscreen mobile menu (outside nav so it covers the whole viewport) -->
+    <Transition name="fullscreen-menu">
+      <div v-if="menuOpen" class="fullscreen-menu md:hidden">
+        <div class="flex flex-col items-center justify-center gap-10 h-full">
+          <a href="/#about" class="menu-item" @click="menuOpen = false">About</a>
+          <a href="/#skills" class="menu-item" @click="menuOpen = false">Skills</a>
+          <a href="/work" class="menu-item" @click="menuOpen = false">Work</a>
+          <a href="/#contact" class="menu-item" @click="menuOpen = false">Contact</a>
+        </div>
+      </div>
+    </Transition>
 
     <div class="page-transition-wrapper">
       <Transition :name="slideDir" mode="out-in">
@@ -43,6 +66,7 @@ import { ref, computed, watch, onMounted, onUnmounted } from "vue";
 import { usePageContext } from "vike-vue/usePageContext";
 
 const pageContext = usePageContext();
+const menuOpen = ref(false);
 const slideDir = ref("slide-left");
 let prevDepth = typeof window !== "undefined" ? window.location.pathname.split("/").filter(Boolean).length : 0;
 
@@ -149,6 +173,76 @@ onUnmounted(() => {
   z-index: 1;
   pointer-events: none;
   transition: background 0.08s ease;
+}
+.hamburger-line {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #f0efff;
+  border-radius: 2px;
+  transition:
+    transform 0.25s ease,
+    opacity 0.2s ease;
+  transform-origin: center;
+}
+
+/* ── Fullscreen mobile menu ─────────────────────────────────── */
+.fullscreen-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(9, 9, 15, 0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.menu-item {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #f0efff;
+  text-decoration: none;
+  letter-spacing: -0.02em;
+  transition: color 0.2s ease;
+  opacity: 0;
+  animation: menuItemFade 0.4s forwards;
+}
+.menu-item:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.menu-item:nth-child(2) {
+  animation-delay: 0.12s;
+}
+.menu-item:nth-child(3) {
+  animation-delay: 0.19s;
+}
+.menu-item:nth-child(4) {
+  animation-delay: 0.26s;
+}
+.menu-item:hover {
+  color: #f97316;
+}
+@keyframes menuItemFade {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.fullscreen-menu-enter-active {
+  transition: opacity 0.25s ease;
+}
+.fullscreen-menu-leave-active {
+  transition: opacity 0.2s ease;
+}
+.fullscreen-menu-enter-from,
+.fullscreen-menu-leave-to {
+  opacity: 0;
 }
 
 /* ── Page slide transitions ───────────────────────────────── */

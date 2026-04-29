@@ -2,7 +2,19 @@ import fs from "fs";
 import path from "path";
 import yaml from "js-yaml";
 import { marked } from "marked";
+import { parseMarkdown, type ContentBlock } from "../../../lib/markdownComponents";
 import type { PageContextServer } from "vike/types";
+
+// Custom renderer: wrap images in <figure> so we can show alt as caption
+const renderer = new marked.Renderer();
+renderer.image = ({ href, title, text }: { href: string; title: string | null; text: string }) => {
+  const caption = text || title || "";
+  return `<figure class="prose-figure">
+  <img src="${href}" alt="${caption}" />
+  ${caption ? `<figcaption>${caption}</figcaption>` : ""}
+</figure>`;
+};
+marked.use({ renderer });
 
 export type Data = {
   title: string;
@@ -10,7 +22,7 @@ export type Data = {
   tags: string[];
   client?: string;
   image?: string;
-  html: string;
+  blocks: ContentBlock[];
   slug: string;
 };
 
@@ -34,7 +46,7 @@ export async function data(pageContext: PageContextServer): Promise<Data> {
 
   const raw = fs.readFileSync(filePath, "utf-8");
   const { data: fm, content } = parseFrontmatter(raw);
-  const html = await marked(content);
+  const blocks = await parseMarkdown(content);
 
   return {
     slug,
@@ -43,6 +55,6 @@ export async function data(pageContext: PageContextServer): Promise<Data> {
     tags: Array.isArray(fm.tags) ? (fm.tags as string[]) : [],
     client: fm.client ? String(fm.client) : undefined,
     image: fm.image ? String(fm.image) : undefined,
-    html,
+    blocks,
   };
 }
