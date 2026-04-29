@@ -2,6 +2,8 @@ import type { OnCreateAppSync } from "vike-vue/types";
 import { createGtag } from "vue-gtag";
 
 export const onCreateApp: OnCreateAppSync = (pageContext): ReturnType<OnCreateAppSync> => {
+  if (import.meta.env.SSR) return;
+
   const { app } = pageContext;
 
   // See https://matteo-gabriele.gitbook.io/vue-gtag/
