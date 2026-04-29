@@ -62,7 +62,7 @@ const post = useData<Data>();
 const imageOk = ref(true);
 
 const config = useConfig();
-config.set({ title: `${post.title} — Elias`, description: post.description });
+config({ title: `${post.title} — Elias`, description: post.description });
 </script>
 
 <style scoped>
