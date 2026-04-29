@@ -45,7 +45,7 @@ export async function data(pageContext: PageContextServer): Promise<Data> {
   }
 
   const { data: fm, content } = parseFrontmatter(raw);
-  const blocks = await parseMarkdown(content);
+  const blocks = parseMarkdown(content);
 
   return {
     slug,

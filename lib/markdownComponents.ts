@@ -16,7 +16,7 @@ export type ContentBlock =
   | { type: "callout"; calloutType: string; html: string }
   | { type: "text-image"; src: string; alt: string; position: "left" | "right"; html: string };
 
-export async function parseMarkdown(content: string): Promise<ContentBlock[]> {
+export function parseMarkdown(content: string): ContentBlock[] {
   const containerRe = /^:::(\w[\w-]*)([^\n]*)\n([\s\S]*?)^:::/gm;
   const blocks: ContentBlock[] = [];
   let lastIndex = 0;
@@ -24,13 +24,13 @@ export async function parseMarkdown(content: string): Promise<ContentBlock[]> {
 
   while ((match = containerRe.exec(content)) !== null) {
     if (match.index > lastIndex) {
-      const html = await marked(content.slice(lastIndex, match.index));
+      const html = marked.parse(content.slice(lastIndex, match.index));
       if (html.trim()) blocks.push({ type: "html", html });
     }
 
     const [full, name, attrs, inner] = match;
     const a = parseAttrs(attrs.trim());
-    const html = await marked(inner.trim());
+    const html = marked.parse(inner.trim());
 
     switch (name) {
       case "quote":
@@ -56,9 +56,9 @@ export async function parseMarkdown(content: string): Promise<ContentBlock[]> {
   }
 
   if (lastIndex < content.length) {
-    const html = await marked(content.slice(lastIndex));
+    const html = marked.parse(content.slice(lastIndex));
     if (html.trim()) blocks.push({ type: "html", html });
   }
 
-  return blocks.length ? blocks : [{ type: "html", html: await marked(content) }];
+  return blocks.length ? blocks : [{ type: "html", html: marked.parse(content) }];
 }
