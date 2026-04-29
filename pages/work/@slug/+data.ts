@@ -1,9 +1,9 @@
-import fs from "fs";
-import path from "path";
 import yaml from "js-yaml";
 import { marked } from "marked";
 import { parseMarkdown, type ContentBlock } from "../../../lib/markdownComponents";
 import type { PageContextServer } from "vike/types";
+
+const markdownFiles = import.meta.glob<string>("/work/*.md", { as: "raw", eager: true });
 
 // Custom renderer: wrap images in <figure> so we can show alt as caption
 const renderer = new marked.Renderer();
@@ -38,13 +38,12 @@ function parseFrontmatter(raw: string): { data: Record<string, unknown>; content
 
 export async function data(pageContext: PageContextServer): Promise<Data> {
   const slug = pageContext.routeParams?.slug ?? "";
-  const filePath = path.resolve(process.cwd(), "work", `${slug}.md`);
+  const raw = markdownFiles[`/work/${slug}.md`];
 
-  if (!fs.existsSync(filePath)) {
+  if (!raw) {
     throw new Error(`Project not found: ${slug}`);
   }
 
-  const raw = fs.readFileSync(filePath, "utf-8");
   const { data: fm, content } = parseFrontmatter(raw);
   const blocks = await parseMarkdown(content);
 

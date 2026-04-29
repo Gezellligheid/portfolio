@@ -1,6 +1,6 @@
-import fs from "fs";
-import path from "path";
 import yaml from "js-yaml";
+
+const markdownFiles = import.meta.glob<string>("/work/*.md", { as: "raw", eager: true });
 
 export type WorkPost = {
   slug: string;
@@ -23,13 +23,8 @@ function parseFrontmatter(raw: string): { data: Record<string, unknown>; content
 }
 
 export async function data(): Promise<Data> {
-  const workDir = path.resolve(process.cwd(), "work");
-  if (!fs.existsSync(workDir)) return { posts: [] };
-
-  const files = fs.readdirSync(workDir).filter((f) => f.endsWith(".md"));
-  const posts = files.map((file): WorkPost => {
-    const slug = path.basename(file, ".md");
-    const raw = fs.readFileSync(path.join(workDir, file), "utf-8");
+  const posts = Object.entries(markdownFiles).map(([filePath, raw]): WorkPost => {
+    const slug = filePath.replace("/work/", "").replace(".md", "");
     const { data: fm } = parseFrontmatter(raw);
     return {
       slug,
