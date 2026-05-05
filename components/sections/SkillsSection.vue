@@ -23,7 +23,7 @@ const skills = [
   { name: "Databases" },
   { name: "Analytics" },
   { name: "Vercel" },
-  { name: "Cloudlfare" },
+  { name: "Cloudlflare" },
   { name: "Hono" },
   { name: "A good coffee ☕" },
   { name: "Tailwind CSS" },

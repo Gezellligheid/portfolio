@@ -8,7 +8,7 @@ image: /ordermailing1.png
 
 # In the beginning
 
-At first, Bellegems Friethuisje makde their orders via a mobile flash application. Back then, when I was a student, I developed a prototype which led eventualy to this project!
+At first, Bellegems Friethuisje made their orders via a mobile flash application. Back then, when I was a student, I developed a prototype which led eventualy to this project!
 
 # The concept
 
